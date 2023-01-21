@@ -43,15 +43,10 @@ export class TVAccessory {
     // see https://developers.homebridge.io/#/service/Lightbulb
 
 
-    // register handlers for the On/Off Characteristic
     this.service.getCharacteristic(this.platform.Characteristic.Active)
-      .onSet(v => {
-        this.platform.log.debug('Set Active ->', v);
-        return v;
-      })                // SET - bind to the `setOn` method below
-      .onGet(() => {
-        this.platform.log.debug('Get Active');
-        return this.platform.Characteristic.Active.ACTIVE;
+      .onSet((newValue) => {
+        this.platform.log.info('set Active => setNewValue: ' + newValue);
+        this.service.updateCharacteristic(this.platform.Characteristic.Active, 1);
       });
 
     this.service.getCharacteristic(this.platform.Characteristic.ActiveIdentifier)
@@ -87,6 +82,16 @@ export class TVAccessory {
       .onGet(() => {
         this.platform.log.debug('Get SleepDiscoveryMode');
         return this.platform.Characteristic.SleepDiscoveryMode.ALWAYS_DISCOVERABLE;
+      });
+
+    this.service.getCharacteristic(this.platform.Characteristic.PictureMode)
+      .onSet(v => {
+        this.platform.log.debug('Set PictureMode ->', v);
+        return v;
+      })                // SET - bind to the `setOn` method below
+      .onGet(() => {
+        this.platform.log.debug('Get PictureMode');
+        return this.platform.Characteristic.PictureMode.GAME;
       });
 
 

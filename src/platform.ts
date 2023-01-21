@@ -65,10 +65,6 @@ export class SmartThingsTVPlatform implements DynamicPlatformPlugin {
     // or a user-defined array in the platform config.
     const exampleDevices = [
       {
-        exampleUniqueId: 'ABCD',
-        exampleDisplayName: 'Bedroom',
-      },
-      {
         exampleUniqueId: 'EFGH',
         exampleDisplayName: 'Kitchen',
       },
@@ -118,7 +114,7 @@ export class SmartThingsTVPlatform implements DynamicPlatformPlugin {
         new TVAccessory(this, accessory);
 
         // link the accessory to your platform
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+        this.api.publishExternalAccessories(PLUGIN_NAME, [accessory]);
       }
     }
   }
