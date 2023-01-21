@@ -6,9 +6,9 @@ import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { TVAccessory } from './platformAccessory';
 
 
-declare module "homebridge" {
-  export interface PlatformConfig  {
-    smartThingsAPIKey: string
+declare module 'homebridge' {
+  export interface PlatformConfig {
+    smartThingsAPIKey: string;
   }
 }
 

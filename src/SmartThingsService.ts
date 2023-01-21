@@ -1,7 +1,7 @@
 export class SmartThingsService {
 
-    constructor(private apiKey: string) {
-    }
+  constructor(private apiKey: string) {
+  }
 
 
 

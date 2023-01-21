@@ -53,5 +53,5 @@ export interface Ocf {
     locale: string;
     lastSignupTime: string;
 }
-export interface Links {
-}
+export type Links = {
+};

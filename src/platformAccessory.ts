@@ -32,7 +32,8 @@ export class TVAccessory {
 
     // get the LightBulb service if it exists, otherwise create a new LightBulb service
     // you can create multiple services for each accessory
-    this.service = this.accessory.getService(this.platform.Service.Television) || this.accessory.addService(this.platform.Service.Television);
+    this.service = this.accessory.getService(this.platform.Service.Television)
+      || this.accessory.addService(this.platform.Service.Television);
 
     // set the service name, this is what is displayed as the default name on the Home app
     // in this example we are using the name we stored in the `accessory.context` in the `discoverDevices` method.
@@ -46,47 +47,47 @@ export class TVAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.Active)
       .onSet(v => {
         this.platform.log.debug('Set Active ->', v);
-        return v
+        return v;
       })                // SET - bind to the `setOn` method below
       .onGet(() => {
         this.platform.log.debug('Get Active');
-        return this.platform.Characteristic.Active.ACTIVE
+        return this.platform.Characteristic.Active.ACTIVE;
       });
 
     this.service.getCharacteristic(this.platform.Characteristic.ActiveIdentifier)
-        .onSet(v => {
-          this.platform.log.debug('Set ActiveIdentifier ->', v);
-          return v
-        })                // SET - bind to the `setOn` method below
-        .onGet(() => {
-          this.platform.log.debug('Get ActiveIdentifier');
-          return this.platform.Characteristic.Active.ACTIVE
-        });
+      .onSet(v => {
+        this.platform.log.debug('Set ActiveIdentifier ->', v);
+        return v;
+      })                // SET - bind to the `setOn` method below
+      .onGet(() => {
+        this.platform.log.debug('Get ActiveIdentifier');
+        return this.platform.Characteristic.Active.ACTIVE;
+      });
 
     this.service.getCharacteristic(this.platform.Characteristic.ConfiguredName)
-        .onSet(v => {
-          this.platform.log.debug('Set ConfiguredName ->', v);
-          return v
-        })                // SET - bind to the `setOn` method below
-        .onGet(() => {
-          this.platform.log.debug('Get ConfiguredName');
-          return 'Some name'
-        });
+      .onSet(v => {
+        this.platform.log.debug('Set ConfiguredName ->', v);
+        return v;
+      })                // SET - bind to the `setOn` method below
+      .onGet(() => {
+        this.platform.log.debug('Get ConfiguredName');
+        return 'Some name';
+      });
 
     this.service.getCharacteristic(this.platform.Characteristic.RemoteKey)
-        .onSet(v => {
-          this.platform.log.debug('Set RemoteKey ->', v);
-        })                // SET - bind to the `setOn` method below
+      .onSet(v => {
+        this.platform.log.debug('Set RemoteKey ->', v);
+      });                // SET - bind to the `setOn` method below
 
     this.service.getCharacteristic(this.platform.Characteristic.SleepDiscoveryMode)
-        .onSet(v => {
-          this.platform.log.debug('Set SleepDiscoveryMode ->', v);
-          return v
-        })                // SET - bind to the `setOn` method below
-        .onGet(() => {
-          this.platform.log.debug('Get SleepDiscoveryMode');
-          return this.platform.Characteristic.SleepDiscoveryMode.ALWAYS_DISCOVERABLE
-        });
+      .onSet(v => {
+        this.platform.log.debug('Set SleepDiscoveryMode ->', v);
+        return v;
+      })                // SET - bind to the `setOn` method below
+      .onGet(() => {
+        this.platform.log.debug('Get SleepDiscoveryMode');
+        return this.platform.Characteristic.SleepDiscoveryMode.ALWAYS_DISCOVERABLE;
+      });
 
 
     // // register handlers for the Brightness Characteristic
@@ -98,7 +99,8 @@ export class TVAccessory {
     //  *
     //  * To avoid "Cannot add a Service with the same UUID another Service without also defining a unique 'subtype' property." error,
     //  * when creating multiple services of the same type, you need to use the following syntax to specify a name and subtype id:
-    //  * this.accessory.getService('NAME') || this.accessory.addService(this.platform.Service.Lightbulb, 'NAME', 'USER_DEFINED_SUBTYPE_ID');
+    //  * this.accessory.getService('NAME') || this.accessory.addService(this.platform.Service.Lightbulb, 'NAME',
+    //  'USER_DEFINED_SUBTYPE_ID');
     //  *
     //  * The USER_DEFINED_SUBTYPE must be unique to the platform accessory (if you platform exposes multiple accessories, each accessory
     //  * can use the same sub type id.)
