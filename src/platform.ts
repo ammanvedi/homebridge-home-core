@@ -2,7 +2,7 @@
 
 import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, Characteristic } from 'homebridge';
 
-import { PLUGIN_NAME } from './settings';
+import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { TVAccessory } from './platformAccessory';
 
 
@@ -114,7 +114,7 @@ export class SmartThingsTVPlatform implements DynamicPlatformPlugin {
         new TVAccessory(this, accessory);
 
         // link the accessory to your platform
-        this.api.publishExternalAccessories(PLUGIN_NAME, [accessory]);
+        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
       }
     }
   }
