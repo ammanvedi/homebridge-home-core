@@ -94,6 +94,17 @@ export class TVAccessory {
         return this.platform.Characteristic.PictureMode.GAME;
       });
 
+    this.service.getCharacteristic(this.platform.Characteristic.Brightness)
+      .onSet(v => {
+        this.platform.log.debug('Set Brightness ->', v);
+        return v;
+      })                // SET - bind to the `setOn` method below
+      .onGet(() => {
+        this.platform.log.debug('Get Brightness');
+
+        return 25;
+      });
+
 
     // // register handlers for the Brightness Characteristic
     // this.service.getCharacteristic(this.platform.Characteristic.Brightness)
