@@ -1,15 +1,14 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "SmartThingsTV",
   "pluginType": "platform",
   "singular": true,
   "schema": {
     "type": "object",
     "properties": {
-      "name": {
-        "title": "Name",
+      "smartThingsAPIKey": {
+        "title": "smartThingsAPIKey",
         "type": "string",
-        "required": true,
-        "default": "Example Dynamic Platform"
+        "required": true
       }
     }
   }
