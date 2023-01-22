@@ -1,16 +1,16 @@
 {
   "private": false,
-  "displayName": "SmartThings TV",
-  "name": "homebridge-smartthings-tv",
-  "version": "1.0.3",
-  "description": "A short description about what your plugin does.",
+  "displayName": "CoreHome",
+  "name": "homebridge-core-home",
+  "version": "1.0.0",
+  "description": "Custom devices for my home. If you arent me, you probably wont like this.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ammanvedi/homebridge-smartthings-tv"
+    "url": "https://github.com/ammanvedi/homebridge-home-core"
   },
   "bugs": {
-    "url": "https://github.com/ammanvedi/homebridge-smartthings-tv/issues"
+    "url": "https://github.com/ammanvedi/homebridge-home-core/issues"
   },
   "engines": {
     "node": ">=14.18.1",

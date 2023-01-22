@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "SmartThingsTV",
+  "pluginAlias": "HomeCore",
   "pluginType": "platform",
   "singular": true,
   "schema": {
