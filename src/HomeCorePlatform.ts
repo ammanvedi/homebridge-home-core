@@ -26,7 +26,7 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
 
   public readonly accessories: PlatformAccessory[] = [];
 
-  private readonly stService = new SmartThingsService(this.config.smartThingsAPIKey);
+  public readonly stService = new SmartThingsService(this.config.smartThingsAPIKey);
 
   constructor(
     public readonly log: Logger,
@@ -61,22 +61,27 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
       return;
     }
 
+    const tvContext = {deviceId: tv.deviceId, component: 'main'};
+
     this.buildAccessory(
       this.api.hap.uuid.generate(`${tv.deviceId}-tv-picture-mode`),
       'TV Picture Mode',
       TVPictureModeAccessory,
+      tvContext,
     );
 
     this.buildAccessory(
       this.api.hap.uuid.generate(`${tv.deviceId}-tv-power`),
       'TV Power',
       TVPowerAccessory,
+      tvContext,
     );
 
     this.buildAccessory(
       this.api.hap.uuid.generate(`${tv.deviceId}-tv-volume`),
       'TV Volume',
       TVVolumeAccessory,
+      tvContext,
     );
 
   }
@@ -85,6 +90,7 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
     uuid: string,
     displayName: string,
     Builder: AccessoryBuilder,
+    context: Record<string, unknown>,
   ) {
     const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
@@ -94,6 +100,7 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
     } else {
       this.log.info('Adding new accessory:', displayName);
       const accessory = new this.api.platformAccessory(displayName, uuid);
+      accessory.context = context;
       new Builder(this, accessory);
       this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
     }

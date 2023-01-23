@@ -1,6 +1,5 @@
-import {CapabilityStatusResponse, DevicesResponse} from './types';
-import fetch from 'node-fetch';
-
+import {CapabilityStatusResponse, Command, CommandResponse, DevicesResponse} from './types';
+import axios from 'axios';
 export class SmartThingsService {
 
   private readonly apiBase: string = 'https://api.smartthings.com/v1';
@@ -20,13 +19,27 @@ export class SmartThingsService {
     return this.get(`${this.apiBase}/devices/${deviceId}/components/${component}/capabilities/${capability}/status`);
   }
 
+  async sendDeviceCommand(deviceId: string, command: Command): Promise<Readonly<CommandResponse>> {
+    return this.post(`${this.apiBase}/devices/${deviceId}/commands`, JSON.stringify(command));
+  }
+
   async get<ResponseType>(url: string): Promise<Readonly<ResponseType>> {
-    const result = await fetch(url, {
+    return await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
       },
-    });
+    }) as Readonly<ResponseType>;
 
-    return await result.json() as Readonly<ResponseType>;
+  }
+
+  async post<ResponseType>(url: string, body: string): Promise<Readonly<ResponseType>> {
+    return await axios.post(url, {
+      method: 'post',
+      body,
+      headers: {
+        'Authorization': `Bearer ${this.apiKey}`,
+      },
+    }) as Readonly<ResponseType>;
+
   }
 }

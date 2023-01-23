@@ -17,14 +17,14 @@ export type DevicesResponse = {
   }[];
 };
 
-enum PictureMode {
+export enum PictureMode {
   Dynamic = 'Dynamic',
   Standard = 'Standard',
   Natural = 'Natural',
   Movie = 'Movie'
 }
 
-enum SwitchValue {
+export enum SwitchValue {
   on = 'on',
   off = 'off'
 }
@@ -55,6 +55,21 @@ export type ComponentStatus =
 
 export type DeviceStatusResponse = {
   components: Record<string, Record<string, ComponentStatus>>;
+};
+
+export type Command = {
+  component: string;
+  capability: string;
+  command: string;
+  arguments: any[];
+};
+
+export type CommandBody = {
+  commands: Command[];
+};
+
+export type CommandResponse = {
+  results: {id: string; status: string}[];
 };
 
 export type CapabilityStatusResponse = ComponentStatus;
