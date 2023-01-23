@@ -1,4 +1,4 @@
-import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
+import { PlatformAccessory } from 'homebridge';
 
 import { HomeCorePlatform } from './HomeCorePlatform';
 import {AccessoryBuilderImpl} from './types';
