@@ -33,11 +33,11 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API,
   ) {
-    this.log.debug('Finished initializing platform:', JSON.stringify(this.config));
+    this.log.error('Finished initializing platform:', JSON.stringify(this.config));
     this.stService = new SmartThingsService(this.config.smartThingsAPIKey);
 
     this.api.on('didFinishLaunching', () => {
-      log.debug('Executed didFinishLaunching callback');
+      log.error('Executed didFinishLaunching callback');
       this.discoverDevices();
     });
   }
