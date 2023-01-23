@@ -26,14 +26,15 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
 
   public readonly accessories: PlatformAccessory[] = [];
 
-  public readonly stService = new SmartThingsService(this.config.smartThingsAPIKey);
+  public readonly stService: SmartThingsService;
 
   constructor(
     public readonly log: Logger,
     public readonly config: PlatformConfig,
     public readonly api: API,
   ) {
-    this.log.debug('Finished initializing platform:', this.config.name);
+    this.log.debug('Finished initializing platform:', JSON.stringify(this.config));
+    this.stService = new SmartThingsService(this.config.smartThingsAPIKey);
 
     this.api.on('didFinishLaunching', () => {
       log.debug('Executed didFinishLaunching callback');
