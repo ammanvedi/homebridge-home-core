@@ -43,14 +43,18 @@ export class TVPictureModeAccessory implements AccessoryBuilderImpl {
       })
       .onSet(async (newValue) => {
         try {
-          await this.platform.stService.sendDeviceCommand(this.accessory.context.deviceId, {
+          const command = {
             'component': 'main',
             'capability': 'custom.picturemode',
             'command': 'setPictureMode',
             'arguments': [
               this.getPictureModeFromBrightnessSetting(newValue as number),
             ],
-          });
+          };
+          this.platform.log.error('sending to device', this.accessory.context.deviceId);
+          this.platform.log.error('sending to device', JSON.stringify(command));
+
+          await this.platform.stService.sendDeviceCommand(this.accessory.context.deviceId, command);
           this.platform.log.info('set Brightness => setNewValue: ' + newValue);
           this.service.updateCharacteristic(this.platform.Characteristic.Brightness, newValue);
         } catch (e) {
