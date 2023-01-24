@@ -24,22 +24,22 @@ export class SmartThingsService {
   }
 
   async get<ResponseType>(url: string): Promise<Readonly<ResponseType>> {
-    return await axios.get(url, {
+    return (await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
       },
-    }) as Readonly<ResponseType>;
+    })).data as Readonly<ResponseType>;
 
   }
 
   async post<ResponseType>(url: string, body: string): Promise<Readonly<ResponseType>> {
-    return await axios.post(url, {
+    return (await axios.post(url, {
       method: 'post',
       body,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
       },
-    }) as Readonly<ResponseType>;
+    })).data as Readonly<ResponseType>;
 
   }
 }
