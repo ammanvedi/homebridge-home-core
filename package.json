@@ -2,7 +2,7 @@
   "private": false,
   "displayName": "CoreHome",
   "name": "homebridge-core-home",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Custom devices for my home. If you arent me, you probably wont like this.",
   "license": "Apache-2.0",
   "repository": {
