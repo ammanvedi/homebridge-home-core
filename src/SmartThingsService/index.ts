@@ -37,9 +37,7 @@ export class SmartThingsService {
   }
 
   async post<ResponseType>(url: string, body: Record<string, unknown>): Promise<Readonly<ResponseType>> {
-    return (await axios.post(url, {
-      method: 'post',
-      data: body,
+    return (await axios.post(url, body, {
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
       },
