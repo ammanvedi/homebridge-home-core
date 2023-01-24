@@ -20,11 +20,11 @@ export class SmartThingsService {
   }
 
   async sendDeviceCommand(deviceId: string, command: Command): Promise<Readonly<CommandResponse>> {
-    return this.post(`${this.apiBase}/devices/${deviceId}/commands`, JSON.stringify({
+    return this.post(`${this.apiBase}/devices/${deviceId}/commands`, {
       commands: [
         command,
       ],
-    }));
+    });
   }
 
   async get<ResponseType>(url: string): Promise<Readonly<ResponseType>> {
@@ -36,10 +36,10 @@ export class SmartThingsService {
 
   }
 
-  async post<ResponseType>(url: string, body: string): Promise<Readonly<ResponseType>> {
+  async post<ResponseType>(url: string, body: Record<string, unknown>): Promise<Readonly<ResponseType>> {
     return (await axios.post(url, {
       method: 'post',
-      body,
+      data: body,
       headers: {
         'Authorization': `Bearer ${this.apiKey}`,
       },
