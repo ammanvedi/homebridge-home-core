@@ -20,7 +20,11 @@ export class SmartThingsService {
   }
 
   async sendDeviceCommand(deviceId: string, command: Command): Promise<Readonly<CommandResponse>> {
-    return this.post(`${this.apiBase}/devices/${deviceId}/commands`, JSON.stringify(command));
+    return this.post(`${this.apiBase}/devices/${deviceId}/commands`, JSON.stringify({
+      commands: [
+        command,
+      ],
+    }));
   }
 
   async get<ResponseType>(url: string): Promise<Readonly<ResponseType>> {
