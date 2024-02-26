@@ -1,0 +1,34 @@
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:30",
+        "manufacturer": "homebridge.io",
+        "model": "homebridge",
+        "port": 51826,
+        "pin": "031-45-154"
+    },
+    "description": "This is an example configuration file with one fake accessory and one fake platform. You can use this as a template for creating your own configuration file containing devices you actually own.",
+    "ports": {
+        "start": 52100,
+        "end": 52150,
+        "comment": "This section is used to control the range of ports that separate accessory (like camera or television) should be bind to."
+    },
+    "accessories": [],
+    "platforms": [
+        {
+            "platform": "config",
+            "name": "Config",
+            "port": 8081,
+            "sudo": true,
+            "log": {
+                "method": "file",
+                "path": "/var/log/homebridge.log"
+            }
+        },
+        {
+            "smartThingsAPIKey": "7c323395-0174-46ac-971f-9509aa7307f2",
+            "statusCubeIP": "192.168.1.241:55443",
+            "platform": "HomeCore"
+        }
+    ]
+}

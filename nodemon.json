@@ -1,10 +1,7 @@
 {
-  "watch": [
-    "src"
-  ],
   "ext": "ts",
-  "ignore": [],
-  "exec": "tsc && homebridge -I -D",
+  "ignore": ["*"],
+  "exec": "tsc && sudo homebridge -I -D -U ~/Documents/code/homebridge-smartthings-tv/hb-config",
   "signal": "SIGTERM",
   "env": {
     "NODE_OPTIONS": "--trace-warnings"

@@ -8,15 +8,16 @@ import {
   Characteristic } from 'homebridge';
 
 import {PLATFORM_NAME, PLUGIN_NAME, TV_NAME} from './settings';
-import {SmartThingsService} from './SmartThingsService';
+import {SmartThingsService} from './TVControls/SmartThingsService';
 import {AccessoryBuilder} from './types';
-import {TVPictureModeAccessory} from './TVPictureModeAccessory';
-import {TVPowerAccessory} from './TVPowerAccessory';
-import {TVVolumeAccessory} from './TVVolumeAccessory';
+import {TVPictureModeAccessory} from './TVControls/TVPictureModeAccessory';
+import {YeelightCubeMatrixService} from './MatrixControls/YeelightCubeMatrixService';
+import {StatusCubeAccessory} from './MatrixControls/StatusCubeAccessory';
 
 declare module 'homebridge' {
   export interface PlatformConfig {
     smartThingsAPIKey: string;
+    statusCubeIP: string;
   }
 }
 
@@ -26,7 +27,8 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
 
   public readonly accessories: PlatformAccessory[] = [];
 
-  public readonly stService: SmartThingsService;
+  public readonly smartThingsService: SmartThingsService;
+  public readonly yeelightCubeService: YeelightCubeMatrixService;
 
   constructor(
     public readonly log: Logger,
@@ -34,11 +36,11 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
     public readonly api: API,
   ) {
     this.log.error('Finished initializing platform:', JSON.stringify(this.config));
-    this.stService = new SmartThingsService(this.config.smartThingsAPIKey);
+    this.smartThingsService = new SmartThingsService(this.config.smartThingsAPIKey);
+    this.yeelightCubeService = new YeelightCubeMatrixService(this.log);
 
     this.api.on('didFinishLaunching', () => {
-      log.error('Executed didFinishLaunching callback');
-      this.discoverDevices();
+      void this.discoverDevices();
     });
   }
 
@@ -54,7 +56,7 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
   }
 
   async discoverTelevision() {
-    const devices = await this.stService.getDevices();
+    const devices = await this.smartThingsService.getDevices();
 
     const tv = devices.items.find(d => d.name === TV_NAME);
 
@@ -71,20 +73,18 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
       tvContext,
     );
 
-    this.buildAccessory(
-      this.api.hap.uuid.generate(`${tv.deviceId}-tv-power`),
-      'TV Power',
-      TVPowerAccessory,
-      tvContext,
-    );
+  }
+
+  async discoverStatusCubes() {
 
     this.buildAccessory(
-      this.api.hap.uuid.generate(`${tv.deviceId}-tv-volume`),
-      'TV Volume',
-      TVVolumeAccessory,
-      tvContext,
+      this.api.hap.uuid.generate('status-cube'),
+      'Status Cube',
+      StatusCubeAccessory,
+      {
+        host: this.config.statusCubeIP,
+      },
     );
-
   }
 
   buildAccessory(
@@ -108,6 +108,12 @@ export class HomeCorePlatform implements DynamicPlatformPlugin {
   }
 
   async discoverDevices() {
-    await this.discoverTelevision();
+    try {
+
+      await this.discoverTelevision();
+      await this.discoverStatusCubes();
+    } catch (e) {
+      this.log.error('Error discovering devices:', e);
+    }
   }
 }

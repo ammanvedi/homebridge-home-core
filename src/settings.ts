@@ -11,3 +11,5 @@ export const PLUGIN_NAME = 'homebridge-home-core';
 export const TV_NAME = '[TV] Samsung Q60 Series (55)';
 
 export const TV_MANUFACTURER = 'Samsung';
+
+export const YEELIGHT_CUBE_MODEL = 'CubeMatrix';

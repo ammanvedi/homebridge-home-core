@@ -1,16 +1,13 @@
 import {PlatformAccessory, Service} from 'homebridge';
 
-import {HomeCorePlatform} from './HomeCorePlatform';
-import {AccessoryBuilderImpl} from './types';
-import {TV_MANUFACTURER, TV_NAME} from './settings';
+import {HomeCorePlatform} from '../HomeCorePlatform';
+import {AccessoryBuilderImpl} from '../types';
+import {TV_MANUFACTURER, TV_NAME} from '../settings';
 import {PictureMode} from './SmartThingsService/types';
 
 export class TVPictureModeAccessory implements AccessoryBuilderImpl {
 
   private readonly PICTURE_MODE_CAPABILITY = 'custom.picturemode';
-
-  private;
-
   service: Service;
   constructor(
     private readonly platform: HomeCorePlatform,
@@ -54,7 +51,7 @@ export class TVPictureModeAccessory implements AccessoryBuilderImpl {
           this.platform.log.error('sending to device', this.accessory.context.deviceId);
           this.platform.log.error('sending to device', JSON.stringify(command));
 
-          await this.platform.stService.sendDeviceCommand(this.accessory.context.deviceId, command);
+          await this.platform.smartThingsService.sendDeviceCommand(this.accessory.context.deviceId, command);
           this.platform.log.info('set Brightness => setNewValue: ' + newValue);
           this.service.updateCharacteristic(this.platform.Characteristic.Brightness, newValue);
         } catch (e) {
@@ -98,7 +95,7 @@ export class TVPictureModeAccessory implements AccessoryBuilderImpl {
   startStateReconciler() {
     setInterval(() => {
 
-      this.platform.stService.getDeviceCapabilityStatus(
+      this.platform.smartThingsService.getDeviceCapabilityStatus(
         this.accessory.context.deviceId,
         this.accessory.context.component,
         this.PICTURE_MODE_CAPABILITY,

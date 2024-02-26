@@ -6,7 +6,12 @@
     "type": "object",
     "properties": {
       "smartThingsAPIKey": {
-        "title": "smartThingsAPIKey",
+        "title": "SmartThings API Key",
+        "type": "string",
+        "required": true
+      },
+      "statusCubeIP": {
+        "title": "Status Cube IP:Port",
         "type": "string",
         "required": true
       }
