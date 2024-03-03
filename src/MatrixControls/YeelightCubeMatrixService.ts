@@ -1,8 +1,7 @@
-import {Discovery, Device} from 'yeelight-platform';
-import {YEELIGHT_CUBE_MODEL} from '../settings';
+import {Device, Discovery} from 'yeelight-platform';
 import {wait} from '../utils';
 import {Logger} from 'homebridge';
-import {v4} from 'uuid';
+import {TrainSpeedType, TravelPredictor} from './TravelPredictor';
 
 
 function reverseArray<T>(arr: T[]): T[] {
@@ -23,22 +22,31 @@ export class YeelightCubeMatrixService {
   static readonly COLOR_OFF = 'AAAA';
   static readonly COLOR_DARK_BLUE = 'BBBB';
   static readonly COLOR_SWEET_GREEN = 'LLll';
+  static readonly COLOR_YELLOW = '8888';
+  static readonly COLOR_CERULEAN = 'DDDD';
+  static readonly COLOR_POP_GREEN = 'MMMM';
 
   //static readonly COLOR_PRIMARY = 'ccc0';
-  static readonly COLOR_PRIMARY = 'LLll';
+  static readonly COLOR_PRIMARY = YeelightCubeMatrixService.COLOR_CERULEAN;
+  static readonly COLOR_FAST = YeelightCubeMatrixService.COLOR_POP_GREEN;
+  static readonly COLOR_SLOW = YeelightCubeMatrixService.COLOR_YELLOW;
 
   static readonly COLOR_SECONDARY = '0000';
-
-  private readonly discoveryService: Discovery = new Discovery();
   private device: Device | null = null;
   private commandId = 0;
 
+  private readonly trainPredictor = new TravelPredictor();
+
+  private static readonly DEFAULT_MATRIX_STATE = [
+    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
+    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
+    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
+    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
+    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
+  ];
+
   matrixState: Array<string> = [
-    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
-    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
-    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
-    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
-    YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY, YeelightCubeMatrixService.COLOR_PRIMARY,
+    ...YeelightCubeMatrixService.DEFAULT_MATRIX_STATE,
   ];
 
   constructor(private readonly logger: Logger) {}
@@ -78,7 +86,34 @@ export class YeelightCubeMatrixService {
     return this.commandId;
   }
 
-  turnOff() {
+  async deviceOn() {
+    await this.initialize();
+
+    setTimeout(() => {
+      this.trainPredictor.stop();
+      this.trainPredictor.start(trains => {
+        console.log(JSON.stringify(trains, null, 2));
+        const newMatrixState = [...YeelightCubeMatrixService.DEFAULT_MATRIX_STATE];
+
+        for (const train of trains) {
+          const index = train.leaveFromHomeMinsFromNowRounded;
+          if(newMatrixState[index]) {
+            newMatrixState[index] =
+              train.speedType === TrainSpeedType.FAST ? YeelightCubeMatrixService.COLOR_FAST : YeelightCubeMatrixService.COLOR_SLOW;
+          }
+        }
+
+        this.setDots(newMatrixState);
+
+      });
+    }, 5 * 1000);
+  }
+
+  deviceOff() {
+    void this.turnOff();
+  }
+
+  private turnOff() {
     this.device.sendCommand({
       id: this.getCommandId(),
       method: 'set_power',
@@ -86,7 +121,7 @@ export class YeelightCubeMatrixService {
     });
   }
 
-  turnOn() {
+  private turnOn() {
     this.device.sendCommand({
       id: this.getCommandId(),
       method: 'set_power',

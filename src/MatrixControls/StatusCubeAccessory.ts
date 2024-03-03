@@ -26,9 +26,9 @@ export class StatusCubeAccessory implements AccessoryBuilderImpl {
       .onSet((newValue) => {
 
         if(newValue) {
-          this.platform.yeelightCubeService.turnOn();
+          this.platform.yeelightCubeService.deviceOn();
         } else {
-          this.platform.yeelightCubeService.turnOff();
+          this.platform.yeelightCubeService.deviceOff();
         }
 
         this.platform.log.info('set On => setNewValue: ' + newValue);
@@ -39,7 +39,6 @@ export class StatusCubeAccessory implements AccessoryBuilderImpl {
 
     void platform.yeelightCubeService.findDevice(host, parseInt(port, 10)).then(() => {
       console.log('Status Cube Found');
-      platform.yeelightCubeService.setDotToColor(0, 4, YeelightCubeMatrixService.COLOR_SECONDARY);
     });
 
   }
